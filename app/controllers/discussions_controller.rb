@@ -1,6 +1,6 @@
 class DiscussionsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_discussion, only: [:edit, :update]
+    before_action :set_discussion, only: [:edit, :update, :destroy]
 
     def index
         @discussions = Discussion.all
@@ -28,6 +28,16 @@ class DiscussionsController < ApplicationController
         respond_to do |format|
             if @discussion.update(discussion_params)
                 format.html { redirect_to discussions_path, notice: "Discussion updated" }
+            else
+                format.html { render :edit, status: :unprocessable_entity }
+            end
+        end
+    end
+
+    def destroy
+        respond_to do |format|
+            if @discussion.destroy
+                format.html { redirect_to discussions_path, notice: "Discussion deleted" }
             else
                 format.html { render :edit, status: :unprocessable_entity }
             end
