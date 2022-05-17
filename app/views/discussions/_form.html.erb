@@ -1,7 +1,7 @@
 <%= form_with(model: discussion) do |form| %>
 
     <% if discussion.errors.any? %>
-        <%= render("errors", discussion: @discussion) %>
+        <%= render("errors", object: discussion) %>
     <% end %>
 
     <div class="mb-3">
