@@ -1,16 +1,17 @@
 class Discussion < ApplicationRecord
-    belongs_to :user, default: -> { Current.user }
-    has_many :posts, dependent: :destroy
+  belongs_to :user, default: -> { Current.user }
 
-    validates :name, presence: true
+  validates :name, presence: true
 
-    after_create_commit -> { broadcast_append_to "discussions" }
-    after_update_commit -> { broadcast_replace_to "discussions" }
-    after_destroy_commit -> { broadcast_remove_to "discussions" }
+  has_many :posts, dependent: :destroy
 
-    accepts_nested_attributes_for :posts
+  accepts_nested_attributes_for :posts
 
-    def to_param
-        "#{id}-#{name.downcase.to_s[0..20]}".parameterize
-    end
+  after_create_commit -> { broadcast_prepend_to "discussions" }
+  after_update_commit -> { broadcast_replace_to "discussions" }
+  after_destroy_commit -> { broadcast_remove_to "discussions" }
+
+  def to_param
+    "#{id}-#{name.downcase.to_s[0...100]}".parameterize
+  end
 end

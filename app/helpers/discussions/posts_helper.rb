@@ -1,2 +1,0 @@
-module Discussions::PostsHelper
-end
