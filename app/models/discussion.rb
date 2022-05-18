@@ -4,9 +4,14 @@ class Discussion < ApplicationRecord
 
   validates :name, presence: true
 
+  #discussion.category_name
+  delegate :name, prefix: :category, to: :category, allow_nil: true
+
   has_many :posts, dependent: :destroy
 
   accepts_nested_attributes_for :posts
+
+  broadcasts_to :category, inserts_by: :prepend
 
   after_create_commit -> { broadcast_prepend_to "discussions" }
   after_update_commit -> { broadcast_replace_to "discussions" }

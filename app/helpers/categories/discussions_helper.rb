@@ -1,0 +1,2 @@
+module Categories::DiscussionsHelper
+end
